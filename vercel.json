@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "outputDirectory": "artifacts/faas-platform/dist",
   "builds": [
     {
       "src": "artifacts/api-server/src/index.ts",
@@ -8,8 +9,7 @@
     },
     {
       "src": "artifacts/faas-platform/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "use": "@vercel/static-build"
     }
   ],
   "rewrites": [
