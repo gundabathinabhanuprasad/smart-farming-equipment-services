@@ -1,25 +1,13 @@
 {
   "version": 2,
-  "outputDirectory": "artifacts/faas-platform/dist",
-  "builds": [
-    {
-      "src": "artifacts/api-server/src/index.ts",
-      "use": "@vercel/node",
-      "config": { "includeFiles": ["artifacts/api-server/src/**", "lib/**"] }
-    },
-    {
-      "src": "artifacts/faas-platform/package.json",
-      "use": "@vercel/static-build"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "artifacts/api-server/src/index.ts"
+      "destination": "/api/index"
     },
     {
       "source": "/(.*)",
-      "destination": "artifacts/faas-platform/$1"
+      "destination": "/index.html"
     }
   ]
 }
