@@ -3,7 +3,7 @@ import { useListEquipment } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { Star, MapPin, User, Info } from "lucide-react";
+import { Star, MapPin, User, Info, Tractor } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -86,6 +86,12 @@ export function EquipmentSection({ onBookNow, locationFilter }: EquipmentSection
                 </div>
               </div>
             ))}
+          </div>
+        ) : equipmentList && equipmentList.length === 0 ? (
+          <div className="text-center py-20 border-2 border-dashed rounded-2xl text-muted-foreground">
+            <Tractor className="h-14 w-14 mx-auto mb-4 opacity-20" />
+            <p className="text-lg font-medium">No equipment listed yet</p>
+            <p className="text-sm mt-1">Equipment owners can add their machines from the Owner Dashboard.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">

@@ -100,10 +100,6 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-muted/50 rounded-xl text-xs text-muted-foreground text-center">
-          <p className="font-medium mb-1">Demo Admin Account</p>
-          <p>Phone: 9000000000 &nbsp;|&nbsp; Password: admin123</p>
-        </div>
       </div>
     </div>
   );

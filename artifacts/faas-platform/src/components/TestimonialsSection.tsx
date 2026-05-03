@@ -46,6 +46,12 @@ export function TestimonialsSection() {
               </div>
             ))}
           </div>
+        ) : testimonials && testimonials.length === 0 ? (
+          <div className="text-center py-20 border-2 border-dashed rounded-2xl text-muted-foreground">
+            <Quote className="h-14 w-14 mx-auto mb-4 opacity-20" />
+            <p className="text-lg font-medium">No reviews yet</p>
+            <p className="text-sm mt-1">Farmer testimonials will appear here once bookings are completed.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {testimonials?.map((testimonial, index) => (

@@ -36,6 +36,12 @@ export function OperatorsSection() {
               </div>
             ))}
           </div>
+        ) : operators && operators.length === 0 ? (
+          <div className="text-center py-20 border-2 border-dashed rounded-2xl text-muted-foreground">
+            <ShieldCheck className="h-14 w-14 mx-auto mb-4 opacity-20" />
+            <p className="text-lg font-medium">No operators listed yet</p>
+            <p className="text-sm mt-1">Verified local operators will appear here once they register.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {operators?.map((operator, index) => (

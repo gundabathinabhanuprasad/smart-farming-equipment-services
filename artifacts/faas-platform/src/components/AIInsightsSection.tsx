@@ -70,6 +70,12 @@ export function AIInsightsSection() {
               </div>
             ))}
           </div>
+        ) : insights && insights.length === 0 ? (
+          <div className="text-center py-20 border-2 border-dashed rounded-2xl text-muted-foreground">
+            <BookOpen className="h-14 w-14 mx-auto mb-4 opacity-20" />
+            <p className="text-lg font-medium">No insights published yet</p>
+            <p className="text-sm mt-1">Crop and weather advisories will appear here once added by the admin.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {insights?.map((insight, index) => {
