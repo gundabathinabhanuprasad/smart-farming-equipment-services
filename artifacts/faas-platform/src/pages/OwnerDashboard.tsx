@@ -48,7 +48,7 @@ const emptyForm = {
 };
 
 export default function OwnerDashboard() {
-  const { user } = useAuth();
+  const { user, authReady } = useAuth();
   const [, setLocation] = useLocation();
   const [tab, setTab] = useState("overview");
   const [equipment, setEquipment] = useState<Equipment[]>([]);
@@ -59,8 +59,9 @@ export default function OwnerDashboard() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    if (!authReady) return;
     if (!user || (user.role !== "owner" && user.role !== "admin")) setLocation("/login");
-  }, [user, setLocation]);
+  }, [authReady, user, setLocation]);
 
   const loadEquipment = () => authFetch<Equipment[]>(buildUrl("/api/owner/equipment")).then(setEquipment).catch(() => {});
   const loadBookings = () => authFetch<Booking[]>(buildUrl("/api/owner/bookings")).then(setBookings).catch(() => {});

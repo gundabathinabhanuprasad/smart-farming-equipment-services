@@ -37,7 +37,7 @@ const statusColors: Record<string, string> = {
 };
 
 export default function DriverDashboard() {
-  const { user } = useAuth();
+  const { user, authReady } = useAuth();
   const [, setLocation] = useLocation();
   const [tab, setTab] = useState("overview");
   const [profile, setProfile] = useState<DriverProfile | null>(null);
@@ -50,8 +50,9 @@ export default function DriverDashboard() {
   const [toggling, setToggling] = useState(false);
 
   useEffect(() => {
+    if (!authReady) return;
     if (!user || (user.role !== "driver" && user.role !== "admin")) setLocation("/login");
-  }, [user, setLocation]);
+  }, [authReady, user, setLocation]);
 
   const loadProfile = () =>
     authFetch<DriverProfile>(buildUrl("/api/driver/profile"))

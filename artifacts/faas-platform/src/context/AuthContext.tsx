@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import { type AuthUser, setAuth, clearAuth, getStoredUser, getToken, buildUrl } from "@/lib/auth";
 
 interface AuthContextValue {
@@ -8,6 +8,7 @@ interface AuthContextValue {
   signup: (data: SignupData) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
+  authReady: boolean;
 }
 
 export interface SignupData {
@@ -27,6 +28,9 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(getStoredUser);
   const [token, setToken] = useState<string | null>(getToken);
+  const [authReady, setAuthReady] = useState(false);
+
+  useEffect(() => { setAuthReady(true); }, []);
 
   const login = useCallback(async (phone: string, password: string) => {
     const res = await fetch(buildUrl("/api/auth/login"), {
@@ -68,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, signup, logout, isAuthenticated: !!user }}
+      value={{ user, token, login, signup, logout, isAuthenticated: !!user, authReady }}
     >
       {children}
     </AuthContext.Provider>

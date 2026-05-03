@@ -1,7 +1,13 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env["SESSION_SECRET"] ?? "khetbook-secret";
+const JWT_SECRET = process.env["SESSION_SECRET"];
+
+if (!JWT_SECRET) {
+  throw new Error(
+    "SESSION_SECRET environment variable is required but was not provided.",
+  );
+}
 
 export interface JwtPayload {
   id: number;

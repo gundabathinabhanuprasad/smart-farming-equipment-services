@@ -68,7 +68,7 @@ const roleColors: Record<string, string> = {
 };
 
 export default function AdminDashboard() {
-  const { user } = useAuth();
+  const { user, authReady } = useAuth();
   const [, setLocation] = useLocation();
   const [tab, setTab] = useState("overview");
   const [stats, setStats] = useState<AdminStats | null>(null);
@@ -78,8 +78,9 @@ export default function AdminDashboard() {
   const [bookings, setBookings] = useState<{ equipment: BookingRow[]; driver: DriverBookingRow[] }>({ equipment: [], driver: [] });
 
   useEffect(() => {
+    if (!authReady) return;
     if (!user || user.role !== "admin") { setLocation("/login"); }
-  }, [user, setLocation]);
+  }, [authReady, user, setLocation]);
 
   useEffect(() => {
     authFetch<AdminStats>(buildUrl("/api/admin/stats")).then(setStats).catch(() => {});
