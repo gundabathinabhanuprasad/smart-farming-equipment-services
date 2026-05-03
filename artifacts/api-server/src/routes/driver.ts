@@ -1,7 +1,7 @@
 import { Router, type IRouter, type Request } from "express";
 import { db, driversTable, driverBookingsTable, usersTable } from "@workspace/db";
 import { eq, desc, and, isNull } from "drizzle-orm";
-import { verifyToken, requireRole, type JwtPayload } from "../middleware/auth";
+import { verifyToken, requireRole, type JwtPayload } from "../middleware/auth.js";
 
 const router: IRouter = Router();
 
