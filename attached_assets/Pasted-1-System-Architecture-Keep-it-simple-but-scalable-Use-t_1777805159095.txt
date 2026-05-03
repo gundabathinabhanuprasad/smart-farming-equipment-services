@@ -1,0 +1,205 @@
+1. System Architecture (Keep it simple but scalable)
+
+Use this stack (don’t overcomplicate):
+
+Frontend: React
+Backend: Flask / Node.js (your choice, Node better for real-time)
+Database: MongoDB (good for flexible data)
+Maps: Google Maps API
+Notifications: Firebase Cloud Messaging (FCM)
+🧩 2. User Roles (3 Core Dashboards)
+1. Admin
+
+Full control system
+
+2. Equipment Owner
+
+Registers equipment + pricing
+
+3. Driver
+
+Registers driving service
+
+4. Farmer (User)
+
+Books equipment/driver
+
+🧠 3. Database Design (Important – don’t mess this up)
+Users Collection
+{
+  _id,
+  name,
+  phone,
+  role: "admin | farmer | owner | driver",
+  location: {
+    lat,
+    lng,
+    village
+  }
+}
+Equipment Collection
+{
+  _id,
+  ownerId,
+  name,
+  type,
+  price_per_hour,
+  availability,
+  location,
+  images
+}
+Driver Collection
+{
+  _id,
+  userId,
+  experience,
+  price_per_hour,
+  availability,
+  location
+}
+Booking Collection
+{
+  _id,
+  farmerId,
+  type: "equipment | driver",
+  itemId,
+  date,
+  timeSlot,
+  status: "pending | accepted | completed",
+  assignedTo,
+  location
+}
+⚙️ 4. Admin Dashboard (FULL CONTROL)
+Features:
+View all users (farmers, owners, drivers)
+Approve/reject registrations
+Edit/delete equipment
+Monitor bookings
+View revenue split (70/30)
+Handle disputes
+Analytics (basic)
+UI Sections:
+Dashboard overview
+Users management
+Equipment management
+Drivers management
+Bookings panel
+
+👉 Admin = GOD MODE
+
+🚜 5. Equipment Owner Dashboard
+Signup Flow:
+Name, phone (OTP login)
+Add location (map or manual)
+Add equipment:
+Name
+Type
+Price/hour
+Availability
+Upload images
+Features:
+Add/Edit/Delete equipment
+View booking requests
+Accept/Reject requests
+Track earnings
+🚗 6. Driver Dashboard
+Signup Flow:
+Name, phone
+Driving experience
+Location
+Availability
+Price/hour
+Features:
+Toggle availability (online/offline)
+Receive booking requests
+Accept/Reject
+View earnings
+🌾 7. Farmer Flow (Core Business Logic)
+Step-by-step:
+Farmer opens app
+Location auto-detected
+Searches:
+Equipment OR Driver
+🔍 Location-Based Search
+
+Use Google Maps + backend filtering:
+
+Show nearby (5–20 km radius)
+Sort by:
+Distance
+Price
+Rating (later)
+📢 Request System (IMPORTANT)
+
+When farmer requests:
+
+👉 Don’t assign instantly
+👉 Broadcast request
+
+Flow:
+Farmer selects:
+Equipment/driver
+Time slot
+System sends notification to:
+Nearby owners/drivers
+First to accept → gets booking
+Others → auto rejected
+🔔 8. Notification System
+
+Use Firebase:
+
+Send notification like:
+
+“New Booking Request near you – Tractor needed at 3PM”
+
+To:
+
+All nearby equipment owners (within radius)
+
+Same for drivers.
+
+📍 9. Location Logic
+
+You must store:
+
+Latitude
+Longitude
+
+Then use:
+
+Haversine formula OR MongoDB geo queries
+
+Example:
+
+find equipment within 10km radius
+🔁 10. Booking Flow (Critical)
+Status lifecycle:
+Pending
+Accepted
+In Progress
+Completed
+💰 11. Payments (Phase 2 – optional now)
+
+Start simple:
+
+Cash / manual entry
+
+Later add:
+
+UPI / Razorpay
+🧪 12. MVP Build Plan (Follow this exactly)
+Phase 1 (Week 1–2)
+User auth (OTP)
+Basic dashboards
+Add equipment & drivers
+Phase 2 (Week 3)
+Location-based search
+Booking system
+Phase 3 (Week 4)
+Notifications
+Admin panel
+⚠️ Common Mistakes (Don’t do this)
+❌ No location filtering → useless app
+❌ Direct booking without request → unfair system
+❌ No availability toggle → chaos
+❌ Complex UI → rural users will quit

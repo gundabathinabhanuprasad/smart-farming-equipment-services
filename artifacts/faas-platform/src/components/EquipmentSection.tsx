@@ -41,10 +41,21 @@ function getEquipmentImage(name: string, imageUrl: string | null) {
 
 interface EquipmentSectionProps {
   onBookNow: (equipmentId: number) => void;
+  locationFilter?: string;
 }
 
-export function EquipmentSection({ onBookNow }: EquipmentSectionProps) {
-  const { data: equipmentList, isLoading } = useListEquipment();
+export function EquipmentSection({ onBookNow, locationFilter }: EquipmentSectionProps) {
+  const { data: allEquipment, isLoading } = useListEquipment();
+
+  const equipmentList = locationFilter
+    ? allEquipment?.filter(e => {
+        const v = locationFilter.toLowerCase();
+        return (
+          (e as unknown as { village?: string }).village?.toLowerCase().includes(v) ||
+          (e as unknown as { district?: string }).district?.toLowerCase().includes(v)
+        );
+      })
+    : allEquipment;
 
   return (
     <section id="equipment" className="py-16 md:py-24 bg-background">

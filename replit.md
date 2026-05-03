@@ -2,7 +2,7 @@
 
 ## Overview
 
-pnpm workspace monorepo using TypeScript. Contains a Smart Farming Equipment as a Service (FaaS) Platform called **KhetBook** — a mobile-first, conversion-focused website for rural India connecting farmers with tractor and agricultural equipment owners.
+pnpm workspace monorepo using TypeScript. Contains a Smart Farming Equipment as a Service (FaaS) Platform called **KhetBook** — a mobile-first, conversion-focused website for rural India connecting farmers with tractor and agricultural equipment owners, drivers, and equipment owners via a multi-role platform.
 
 ## Stack
 
@@ -16,40 +16,69 @@ pnpm workspace monorepo using TypeScript. Contains a Smart Farming Equipment as 
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 - **Frontend**: React + Vite + Tailwind CSS + shadcn/ui + Framer Motion
+- **Auth**: JWT (jsonwebtoken) + bcryptjs, stored in localStorage
 
 ## Artifacts
 
 ### `artifacts/faas-platform` — KhetBook FaaS Platform (preview path: `/`)
-Main landing page with:
+Full multi-role smart farming platform with:
 - Hero section with real tractor imagery
-- Equipment listing grid (useListEquipment)
-- AI Insights section (useListInsights)
-- Testimonials (useListTestimonials)
-- Village Operators (useListOperators)
-- Platform stats (useGetPlatformStats)
-- Booking dialog with full form (useCreateBooking)
+- Location-based search bar (filter equipment + drivers by village/district)
+- Equipment listing grid with Haversine location filtering
+- Driver listing section with booking dialog (broadcast system)
+- AI Insights section
+- Testimonials, Village Operators, Platform stats
+- Booking dialogs (equipment + driver)
 - Revenue model section (70%/30% split)
 - Contact section + sticky mobile CTA
+- Auth-aware Navbar (Sign In / Join / Dashboard buttons)
+
+**Pages:**
+- `/` — Home (public)
+- `/login` — Login page (phone + password, demo admin credentials shown)
+- `/signup` — Signup page (role selection: farmer/owner/driver, location detection)
+- `/admin` — Admin Dashboard (users, equipment, drivers, bookings, stats)
+- `/owner` — Owner Dashboard (list equipment, manage bookings, accept/reject, earnings)
+- `/driver` — Driver Dashboard (profile setup, online/offline toggle, broadcast requests, earnings)
 
 Design: Deep agricultural green (#1a4731), warm ivory background, earthy amber accent. Inter + Playfair Display fonts.
 
 ### `artifacts/api-server` — Express API Server (preview path: `/api`)
-REST API serving all FaaS platform data.
+REST API with JWT-based multi-role auth.
 
-Routes:
-- `GET /api/equipment` — list all equipment (filter by category, available)
+**Public routes:**
+- `GET /api/equipment` — list equipment (filter: category, available, lat/lng/radius, village, district)
 - `GET /api/equipment/:id` — get single equipment
-- `GET /api/bookings` — list bookings
-- `POST /api/bookings` — create booking
-- `GET /api/bookings/:id` — get booking
-- `GET /api/testimonials` — list testimonials
-- `GET /api/operators` — list village operators
-- `GET /api/insights` — list AI insights
-- `GET /api/stats` — platform statistics
+- `GET /api/bookings` — list equipment bookings
+- `POST /api/bookings` — create equipment booking (defaults to status=pending)
+- `GET /api/testimonials`, `/api/operators`, `/api/insights`, `/api/stats`
+- `GET /api/drivers` — list available drivers (filter: lat/lng/radius, village, district)
+- `POST /api/driver-bookings` — create driver booking (broadcast if no driverId given)
+
+**Auth routes:**
+- `POST /api/auth/signup` — register (farmer/owner/driver)
+- `POST /api/auth/login` — login → JWT token
+- `GET /api/auth/me` — current user info
+
+**Protected routes (role-based):**
+- `/api/admin/*` — admin-only: stats, manage users/equipment/drivers/bookings
+- `/api/owner/*` — owner+admin: CRUD equipment, view/accept/reject bookings
+- `/api/driver/*` — driver+admin: profile setup, availability toggle, view broadcast + assigned bookings
 
 ## Database Schema
 
-Tables: `equipment`, `bookings`, `testimonials`, `operators`, `insights`
+Tables: `equipment`, `bookings`, `testimonials`, `operators`, `insights`, `users`, `drivers`, `driver_bookings`
+
+**Extended columns:**
+- `equipment`: ownerId, locationLat, locationLng, village, district, state
+- `bookings`: farmerId, farmerLat, farmerLng, equipmentName, status defaults to "pending"
+- `users`: name, phone, passwordHash, role, village, district, state, locationLat, locationLng, status
+- `drivers`: userId, experience, pricePerHour, available, village, district, locationLat/Lng, bio, avatarUrl, rating, totalBookings
+- `driver_bookings`: farmerName/Phone/Village, farmerId, farmerLat/Lng, driverId, slotDate/Time, durationHours, status, totalAmount, taskType
+
+## Admin Demo Account
+- Phone: `9000000000`
+- Password: `admin123`
 
 ## Key Commands
 

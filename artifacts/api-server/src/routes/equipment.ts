@@ -10,7 +10,21 @@ import {
 
 const router: IRouter = Router();
 
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 router.get("/equipment", async (req, res): Promise<void> => {
+  const { lat, lng, radius, village, district } = req.query as {
+    lat?: string; lng?: string; radius?: string;
+    village?: string; district?: string;
+  };
+
   const query = ListEquipmentQueryParams.safeParse(req.query);
   if (!query.success) {
     res.status(400).json({ error: query.error.message });
@@ -26,6 +40,23 @@ router.get("/equipment", async (req, res): Promise<void> => {
     rows = rows.filter(
       (e) => e.category.toLowerCase() === query.data.category!.toLowerCase(),
     );
+  }
+
+  if (lat && lng) {
+    const rKm = Number(radius ?? "20");
+    rows = rows.filter(e =>
+      e.locationLat != null && e.locationLng != null &&
+      haversineKm(Number(lat), Number(lng), e.locationLat!, e.locationLng!) <= rKm
+    );
+  } else if (village) {
+    const v = village.toLowerCase();
+    rows = rows.filter(e =>
+      e.village?.toLowerCase().includes(v) ||
+      e.district?.toLowerCase().includes(v)
+    );
+  } else if (district) {
+    const d = district.toLowerCase();
+    rows = rows.filter(e => e.district?.toLowerCase().includes(d));
   }
 
   res.json(ListEquipmentResponse.parse(rows));
