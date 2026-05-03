@@ -21,6 +21,10 @@
     "skipLibCheck": true,
     "target": "es2022",
     "types": [],
+    "paths": {
+      "@workspace/api-zod": ["./lib/api-zod/src/index"],
+      "@workspace/db": ["./lib/db/src/index"]
+    },
     "customConditions": ["workspace"]
   }
 }
