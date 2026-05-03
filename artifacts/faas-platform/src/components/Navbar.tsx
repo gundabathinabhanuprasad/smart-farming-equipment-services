@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 import { Menu, X, Tractor } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -46,7 +46,7 @@ export function Navbar({ onBookNow }: NavbarProps) {
 
         <div className="hidden md:flex items-center gap-4">
           <Button variant="outline" className="hidden lg:flex" asChild>
-            <a href="tel:+918000000000">Call Us</a>
+            <a href="tel:+911800123456">Call Us</a>
           </Button>
           <Button onClick={onBookNow}>
             Book Now
@@ -100,7 +100,7 @@ export function Navbar({ onBookNow }: NavbarProps) {
                 Book Now
               </Button>
               <Button variant="outline" asChild className="w-full">
-                <a href="tel:+918000000000">Call Us</a>
+                <a href="tel:+911800123456">Call Us</a>
               </Button>
             </div>
           </div>

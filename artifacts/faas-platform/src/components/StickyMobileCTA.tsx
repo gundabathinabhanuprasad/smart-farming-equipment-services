@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import { CalendarClock, Phone } from "lucide-react";
 
@@ -15,7 +14,7 @@ export function StickyMobileCTA({ onBookNow }: StickyMobileCTAProps) {
           className="flex-1 h-12 text-foreground border-border" 
           asChild
         >
-          <a href="tel:+918000000000">
+          <a href="tel:+911800123456">
             <Phone className="mr-2 h-4 w-4" />
             Call Now
           </a>

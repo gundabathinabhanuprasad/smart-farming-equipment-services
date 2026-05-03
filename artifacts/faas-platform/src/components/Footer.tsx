@@ -1,5 +1,3 @@
-import React from "react";
-import { Link } from "wouter";
 import { Tractor, Shield, Award, CheckCircle } from "lucide-react";
 
 export function Footer() {

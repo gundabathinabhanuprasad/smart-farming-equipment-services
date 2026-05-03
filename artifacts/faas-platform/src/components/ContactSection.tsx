@@ -1,5 +1,4 @@
-import React from "react";
-import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
+import { Phone, MapPin, Clock, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function ContactSection() {
@@ -21,7 +20,7 @@ export function ContactSection() {
                 <Phone className="h-6 w-6 text-primary mr-4 mt-1 shrink-0" />
                 <div>
                   <h4 className="font-bold text-lg mb-1">Toll-Free Helpline</h4>
-                  <p className="text-2xl font-bold text-primary mb-1">+91 1800-123-4567</p>
+                  <p className="text-2xl font-bold text-primary mb-1">+91 1800-123-456</p>
                   <p className="text-sm text-muted-foreground flex items-center">
                     <Clock className="h-3 w-3 mr-1" /> Available 6:00 AM to 8:00 PM Daily
                   </p>
@@ -34,7 +33,7 @@ export function ContactSection() {
                   <h4 className="font-bold text-lg mb-1">WhatsApp Support</h4>
                   <p className="text-foreground mb-2">Message us for quick bookings and updates.</p>
                   <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-50" asChild>
-                    <a href="https://wa.me/918001234567" target="_blank" rel="noopener noreferrer">
+                    <a href="https://wa.me/911800123456" target="_blank" rel="noopener noreferrer">
                       Chat on WhatsApp
                     </a>
                   </Button>

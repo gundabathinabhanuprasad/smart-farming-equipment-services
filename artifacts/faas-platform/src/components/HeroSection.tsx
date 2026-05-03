@@ -1,7 +1,5 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { useGetPlatformStats } from "@workspace/api-client-react";
 import heroImage from "@/assets/images/hero-tractor.png";
 import { Phone, CalendarClock } from "lucide-react";
 

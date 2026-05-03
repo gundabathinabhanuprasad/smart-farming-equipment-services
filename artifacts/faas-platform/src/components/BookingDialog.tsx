@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -59,7 +59,7 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      equipmentId: defaultEquipmentId || 0,
+      equipmentId: 0,
       farmerName: "",
       farmerPhone: "",
       village: "",
@@ -69,12 +69,20 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
     },
   });
 
-  // Update default equipment if it changes
-  React.useEffect(() => {
-    if (defaultEquipmentId && open) {
-      form.setValue("equipmentId", defaultEquipmentId);
+  // Reset form and sync selected equipment every time the dialog opens
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        equipmentId: defaultEquipmentId ?? 0,
+        farmerName: "",
+        farmerPhone: "",
+        village: "",
+        slotTime: "",
+        durationHours: 1,
+        notes: "",
+      });
     }
-  }, [defaultEquipmentId, open, form]);
+  }, [open, defaultEquipmentId, form]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     createBooking.mutate(
@@ -87,13 +95,12 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
       {
         onSuccess: (data) => {
           toast.success("Booking Confirmed!", {
-            description: `Booking ID: #${data.id}. Total Amount: Rs. ${data.totalAmount}`,
+            description: `Booking #${data.id} confirmed. Total: Rs. ${data.totalAmount.toLocaleString("en-IN")}`,
           });
           onOpenChange(false);
-          form.reset();
         },
         onError: () => {
-          toast.error("Failed to create booking. Please try again.");
+          toast.error("Booking failed. Please try again.");
         },
       }
     );
@@ -122,14 +129,15 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
                     value={field.value ? field.value.toString() : ""}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger data-testid="select-equipment">
                         <SelectValue placeholder="Choose equipment..." />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {equipmentList.map((eq) => (
                         <SelectItem key={eq.id} value={eq.id.toString()}>
-                          {eq.name} (Rs. {eq.pricePerHour}/hr)
+                          {eq.name} — Rs.{eq.pricePerHour}/hr
+                          {!eq.available && " (Unavailable)"}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -151,6 +159,7 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
                         <FormControl>
                           <Button
                             variant={"outline"}
+                            data-testid="button-date"
                             className={cn(
                               "w-full pl-3 text-left font-normal",
                               !field.value && "text-muted-foreground"
@@ -186,15 +195,16 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Time Slot</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger data-testid="select-time">
                           <SelectValue placeholder="Select time" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="morning">Morning (6AM - 12PM)</SelectItem>
                         <SelectItem value="afternoon">Afternoon (12PM - 6PM)</SelectItem>
+                        <SelectItem value="evening">Evening (6PM - 9PM)</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -210,7 +220,7 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
                 <FormItem>
                   <FormLabel>Duration (Hours)</FormLabel>
                   <FormControl>
-                    <Input type="number" min={1} max={12} {...field} />
+                    <Input data-testid="input-duration" type="number" min={1} max={12} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -225,7 +235,7 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
                   <FormItem>
                     <FormLabel>Your Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ram Singh" {...field} />
+                      <Input data-testid="input-name" placeholder="Ram Singh" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -239,7 +249,7 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
                   <FormItem>
                     <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="9876543210" {...field} />
+                      <Input data-testid="input-phone" placeholder="9876543210" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -254,7 +264,7 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
                 <FormItem>
                   <FormLabel>Village</FormLabel>
                   <FormControl>
-                    <Input placeholder="Palwal" {...field} />
+                    <Input data-testid="input-village" placeholder="Palwal" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -268,14 +278,19 @@ export function BookingDialog({ open, onOpenChange, defaultEquipmentId }: Bookin
                 <FormItem>
                   <FormLabel>Additional Notes (Optional)</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Any specific requirements..." {...field} />
+                    <Textarea data-testid="input-notes" placeholder="Any specific requirements..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" className="w-full" disabled={createBooking.isPending}>
+            <Button
+              data-testid="button-submit"
+              type="submit"
+              className="w-full"
+              disabled={createBooking.isPending}
+            >
               {createBooking.isPending ? "Submitting..." : "Confirm Booking Request"}
             </Button>
           </form>

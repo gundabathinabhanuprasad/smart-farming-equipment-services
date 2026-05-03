@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { useListTestimonials } from "@workspace/api-client-react";
 import { Skeleton } from "@/components/ui/skeleton";

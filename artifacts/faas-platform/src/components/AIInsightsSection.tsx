@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { useListInsights } from "@workspace/api-client-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -26,11 +25,22 @@ export function AIInsightsSection() {
       case "high":
         return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800";
       case "medium":
+      case "normal":
         return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800";
       case "low":
         return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800";
       default:
         return "bg-muted text-muted-foreground border-border";
+    }
+  };
+
+  const getUrgencyLabel = (urgency: string) => {
+    switch (urgency.toLowerCase()) {
+      case "high": return "High Priority";
+      case "medium":
+      case "normal": return "Advisory";
+      case "low": return "Low Priority";
+      default: return urgency;
     }
   };
 
@@ -76,7 +86,7 @@ export function AIInsightsSection() {
                 >
                   <div className={`absolute top-0 left-0 w-1 h-full ${
                     insight.urgency === 'high' ? 'bg-red-500' : 
-                    insight.urgency === 'medium' ? 'bg-amber-500' : 'bg-green-500'
+                    insight.urgency === 'medium' || insight.urgency === 'normal' ? 'bg-amber-500' : 'bg-green-500'
                   }`} />
                   
                   <div className="flex justify-between items-start mb-4">
@@ -84,7 +94,7 @@ export function AIInsightsSection() {
                       <Icon className="h-6 w-6" />
                     </div>
                     <Badge variant="outline" className={getUrgencyColor(insight.urgency)}>
-                      {insight.urgency} Priority
+                      {getUrgencyLabel(insight.urgency)}
                     </Badge>
                   </div>
                   
