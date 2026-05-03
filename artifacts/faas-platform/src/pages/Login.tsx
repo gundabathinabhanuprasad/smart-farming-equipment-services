@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -15,12 +15,14 @@ export default function Login() {
   const { login, user } = useAuth();
   const [, setLocation] = useLocation();
 
-  if (user) {
-    if (user.role === "admin") setLocation("/admin");
-    else if (user.role === "owner") setLocation("/owner");
-    else if (user.role === "driver") setLocation("/driver");
-    else setLocation("/");
-  }
+  useEffect(() => {
+    if (user) {
+      if (user.role === "admin") setLocation("/admin");
+      else if (user.role === "owner") setLocation("/owner");
+      else if (user.role === "driver") setLocation("/driver");
+      else setLocation("/");
+    }
+  }, [user, setLocation]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
