@@ -3,13 +3,25 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Smart Farming FaaS Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: equipment
+    description: Farming equipment listings
+  - name: bookings
+    description: Equipment booking operations
+  - name: testimonials
+    description: Farmer testimonials
+  - name: operators
+    description: Village operators
+  - name: insights
+    description: AI crop and farming insights
+  - name: stats
+    description: Platform statistics
 paths:
   /healthz:
     get:
@@ -24,6 +36,167 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /equipment:
+    get:
+      operationId: listEquipment
+      tags: [equipment]
+      summary: List all available equipment
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: available
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of equipment
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Equipment"
+
+  /equipment/{id}:
+    get:
+      operationId: getEquipment
+      tags: [equipment]
+      summary: Get equipment by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Equipment details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Equipment"
+        "404":
+          description: Equipment not found
+
+  /bookings:
+    get:
+      operationId: listBookings
+      tags: [bookings]
+      summary: List all bookings
+      responses:
+        "200":
+          description: List of bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Booking"
+    post:
+      operationId: createBooking
+      tags: [bookings]
+      summary: Create a new booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBookingBody"
+      responses:
+        "201":
+          description: Booking created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "400":
+          description: Invalid input
+
+  /bookings/{id}:
+    get:
+      operationId: getBooking
+      tags: [bookings]
+      summary: Get booking by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Booking details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "404":
+          description: Booking not found
+
+  /testimonials:
+    get:
+      operationId: listTestimonials
+      tags: [testimonials]
+      summary: List all testimonials
+      responses:
+        "200":
+          description: List of testimonials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Testimonial"
+
+  /operators:
+    get:
+      operationId: listOperators
+      tags: [operators]
+      summary: List all village operators
+      responses:
+        "200":
+          description: List of operators
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Operator"
+
+  /insights:
+    get:
+      operationId: listInsights
+      tags: [insights]
+      summary: Get AI crop and farming insights
+      responses:
+        "200":
+          description: List of AI insights
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Insight"
+
+  /stats:
+    get:
+      operationId: getPlatformStats
+      tags: [stats]
+      summary: Get platform-wide statistics
+      responses:
+        "200":
+          description: Platform statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformStats"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +207,231 @@ components:
       required:
         - status
 
+    Equipment:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        pricePerHour:
+          type: number
+        pricePerDay:
+          type: number
+        available:
+          type: boolean
+        imageUrl:
+          type: ["string", "null"]
+        operatorName:
+          type: ["string", "null"]
+        village:
+          type: ["string", "null"]
+        rating:
+          type: ["number", "null"]
+        totalBookings:
+          type: integer
+      required:
+        - id
+        - name
+        - category
+        - description
+        - pricePerHour
+        - pricePerDay
+        - available
+        - imageUrl
+        - operatorName
+        - village
+        - rating
+        - totalBookings
+
+    CreateBookingBody:
+      type: object
+      properties:
+        farmerName:
+          type: string
+        farmerPhone:
+          type: string
+        village:
+          type: string
+        equipmentId:
+          type: integer
+        slotDate:
+          type: string
+        slotTime:
+          type: string
+        durationHours:
+          type: integer
+        notes:
+          type: ["string", "null"]
+      required:
+        - farmerName
+        - farmerPhone
+        - village
+        - equipmentId
+        - slotDate
+        - slotTime
+        - durationHours
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+        farmerName:
+          type: string
+        farmerPhone:
+          type: string
+        village:
+          type: string
+        equipmentId:
+          type: integer
+        equipmentName:
+          type: ["string", "null"]
+        slotDate:
+          type: string
+        slotTime:
+          type: string
+        durationHours:
+          type: integer
+        status:
+          type: string
+        totalAmount:
+          type: number
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - farmerName
+        - farmerPhone
+        - village
+        - equipmentId
+        - equipmentName
+        - slotDate
+        - slotTime
+        - durationHours
+        - status
+        - totalAmount
+        - notes
+        - createdAt
+
+    Testimonial:
+      type: object
+      properties:
+        id:
+          type: integer
+        farmerName:
+          type: string
+        village:
+          type: string
+        state:
+          type: string
+        content:
+          type: string
+        rating:
+          type: integer
+        equipmentUsed:
+          type: string
+        timeSaved:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+      required:
+        - id
+        - farmerName
+        - village
+        - state
+        - content
+        - rating
+        - equipmentUsed
+        - timeSaved
+        - avatarUrl
+
+    Operator:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        village:
+          type: string
+        district:
+          type: string
+        state:
+          type: string
+        phone:
+          type: string
+        equipmentCount:
+          type: integer
+        rating:
+          type: number
+        available:
+          type: boolean
+        avatarUrl:
+          type: ["string", "null"]
+      required:
+        - id
+        - name
+        - village
+        - district
+        - state
+        - phone
+        - equipmentCount
+        - rating
+        - available
+        - avatarUrl
+
+    Insight:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        crop:
+          type: ["string", "null"]
+        urgency:
+          type: string
+        icon:
+          type: ["string", "null"]
+      required:
+        - id
+        - type
+        - title
+        - description
+        - crop
+        - urgency
+        - icon
+
+    PlatformStats:
+      type: object
+      properties:
+        totalFarmers:
+          type: integer
+        totalEquipment:
+          type: integer
+        totalBookings:
+          type: integer
+        villagesCovered:
+          type: integer
+        avgTimeSavedHours:
+          type: number
+        activeOperators:
+          type: integer
+      required:
+        - totalFarmers
+        - totalEquipment
+        - totalBookings
+        - villagesCovered
+        - avgTimeSavedHours
+        - activeOperators

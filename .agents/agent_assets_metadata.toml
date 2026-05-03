@@ -1,0 +1,62 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "FRAH2jXenDxI5G3DyS-78"
+uri = "file://artifacts/faas-platform/src/assets/images/hero-tractor.png"
+type = "image"
+title = "Tractor in golden hour field"
+
+[[generated]]
+id = "9NU-d0gh1fNjhlGFedIv6"
+uri = "file://artifacts/faas-platform/src/assets/images/harvester.png"
+type = "image"
+title = "Combine harvester in wheat field"
+
+[[generated]]
+id = "M730EYZJX4riByqIBcyf6"
+uri = "file://artifacts/faas-platform/src/assets/images/rotavator.png"
+type = "image"
+title = "Tractor with rotavator"
+
+[[generated]]
+id = "3upyzOADk-7wQlmKJ-2a7"
+uri = "file://artifacts/faas-platform/src/assets/images/seed-drill.png"
+type = "image"
+title = "Seed drill equipment"
+
+[[generated]]
+id = "NHOJxIMlnbRjBq5CIB0TU"
+uri = "file://artifacts/faas-platform/src/assets/images/cultivator.png"
+type = "image"
+title = "Tractor with cultivator"
+
+[[generated]]
+id = "8OsAJKFI1anGd7KoX9fXX"
+uri = "file://artifacts/faas-platform/src/assets/images/sprayer.png"
+type = "image"
+title = "Boom sprayer equipment"
+
+[[generated]]
+id = "mg5pix5tmgXuSWxYraAw8"
+uri = "file://artifacts/faas-platform/src/assets/images/farmer-1.png"
+type = "image"
+title = "Indian farmer portrait 1"
+
+[[generated]]
+id = "hNQx5YQ_kRm2MK3srYZ9J"
+uri = "file://artifacts/faas-platform/src/assets/images/farmer-2.png"
+type = "image"
+title = "Indian farmer portrait 2"
+
+[[generated]]
+id = "3N4-otvVm22_34yUT5Red"
+uri = "file://artifacts/faas-platform/src/assets/images/farmer-3.png"
+type = "image"
+title = "Indian farmer portrait 3"
+
+[[generated]]
+id = "f45gTrYLs2hDw9fan95BD"
+uri = "file://artifacts/faas-platform/src/assets/images/operator-1.png"
+type = "image"
+title = "Tractor operator portrait"
