@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { db, usersTable, equipmentTable, bookingsTable, driversTable, driverBookingsTable } from "@workspace/db";
+import { db, usersTable, equipmentTable, bookingsTable, driversTable, driverBookingsTable } from "../../../lib/db/src/index.js";
 import { eq, count, desc } from "drizzle-orm";
 import { verifyToken, requireRole } from "../middleware/auth.js";
 

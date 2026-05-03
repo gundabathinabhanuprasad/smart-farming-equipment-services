@@ -1,5 +1,5 @@
 import * as zod from "zod";
-export * from './generated/api';
+export * from './generated/api.js';
 
 export const LoginBody = zod.object({
   phone: zod.string().min(10, "Phone number must be at least 10 digits"),

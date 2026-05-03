@@ -1,12 +1,12 @@
 import { Router, type IRouter } from "express";
-import { db, equipmentTable } from "@workspace/db";
+import { db, equipmentTable } from "../../../lib/db/src/index.js";
 import { eq } from "drizzle-orm";
 import {
   ListEquipmentQueryParams,
   GetEquipmentParams,
   ListEquipmentResponse,
   GetEquipmentResponse,
-} from "@workspace/api-zod";
+} from "../../../lib/api-zod/src/index.js";
 
 const router: IRouter = Router();
 

@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
-import { db, testimonialsTable } from "@workspace/db";
-import { ListTestimonialsResponse } from "@workspace/api-zod";
+import { db, testimonialsTable } from "../../../lib/db/src/index.js";
+import { ListTestimonialsResponse } from "../../../lib/api-zod/src/index.js";
 
 const router: IRouter = Router();
 

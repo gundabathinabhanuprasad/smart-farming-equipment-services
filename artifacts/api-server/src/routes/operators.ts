@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
-import { db, operatorsTable } from "@workspace/db";
-import { ListOperatorsResponse } from "@workspace/api-zod";
+import { db, operatorsTable } from "../../../lib/db/src/index.js";
+import { ListOperatorsResponse } from "../../../lib/api-zod/src/index.js";
 
 const router: IRouter = Router();
 
