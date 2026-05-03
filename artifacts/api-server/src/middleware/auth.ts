@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env["SESSION_SECRET"];
+const JWT_SECRET = process.env["SESSION_SECRET"] as string;
 
 if (!JWT_SECRET) {
   throw new Error(
