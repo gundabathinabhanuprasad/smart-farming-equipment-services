@@ -9,7 +9,7 @@
     {
       "src": "artifacts/faas-platform/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist/public" }
+      "config": { "distDir": "dist" }
     }
   ],
   "rewrites": [
